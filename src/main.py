@@ -50,3 +50,16 @@ def modificar_festival(festival:Festival,session:SessionDep):
     else:
         raise HTTPException(404,"Error al encontrar el festival")
     return "Se ha modificado el festival"
+
+
+@app.patch("/festival")
+def modificar_festival(festival:Festival,session:SessionDep):
+    fest=session.exec(select(Festival).where(Festival.nombre==festival.nombre)).first()
+    if fest:
+        fest.nombre=festival.nombre
+        fest.artista=festival.artista
+        fest.horas=festival.horas
+        session.commit()
+    else:
+        raise HTTPException(404,"Error al encontrar el festival")
+    return "Se ha modificado el festival"
