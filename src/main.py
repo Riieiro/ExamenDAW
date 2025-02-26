@@ -37,10 +37,12 @@ def borrar_festival(festival:Festival, session: SessionDep):
     return "Se ha borrado el festival"
 
 
-@app.put("/festival",response_model=Festival)
+@app.put("/festival")
 def modificar_festival(festival:Festival,session:SessionDep):
-    session.delete(festival)
-    session.commit()
-    session.add(festival)
-    session.commit()
-    return festival
+    fest=session.exec(select(Festival).where(Festival.nombre==festival.nombre)).first()
+    if fest:
+        fest.nombre=festival.nombre
+        fest.artista=festival.artista
+        fest.horas=festival.horas
+        session.commit()
+    return "Se ha modificado el festival"
