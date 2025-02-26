@@ -34,6 +34,8 @@ def borrar_festival(festival:Festival, session: SessionDep):
     if fest:
         session.delete(fest)
         session.commit()
+    else:
+        raise HTTPException(404,"Error al encontrar el festival")
     return "Se ha borrado el festival"
 
 
@@ -45,4 +47,6 @@ def modificar_festival(festival:Festival,session:SessionDep):
         fest.artista=festival.artista
         fest.horas=festival.horas
         session.commit()
+    else:
+        raise HTTPException(404,"Error al encontrar el festival")
     return "Se ha modificado el festival"
