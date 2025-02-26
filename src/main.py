@@ -26,20 +26,21 @@ def lista_festival(session: SessionDep):
 def subir_festival(festival:Festival,session: SessionDep):
     session.add(festival)
     session.commit()
-    return festival
+    return "Se ha añadido el festival"
 
-@app.delete("/festival",response_model=Festival)
+@app.delete("/festival")
 def borrar_festival(festival:Festival, session: SessionDep):
-    session.delete(festival)
-    session.commit()
-    return festival
+    fest=session.exec(select(Festival).where(Festival.nombre==festival.nombre)).first()
+    if fest:
+        session.delete(fest)
+        session.commit()
+    return "Se ha borrado el festival"
+
 
 @app.put("/festival",response_model=Festival)
 def modificar_festival(festival:Festival,session:SessionDep):
-    fest=session.exec(select(Festival).where(Festival.nombre==festival.nombre))
-    if not fest:
-        raise HTTPException(404,"Error al encontrar el festival")
-    festival.artista=fest.artista
-    festival.horas=fest.horas
+    session.delete(festival)
     session.commit()
-    return fest
+    session.add(festival)
+    session.commit()
+    return festival
